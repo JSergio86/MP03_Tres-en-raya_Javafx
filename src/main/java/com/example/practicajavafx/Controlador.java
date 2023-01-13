@@ -34,7 +34,8 @@ public class Controlador implements Initializable {
     Button b7;
     @FXML
     Button b8;
-
+    @FXML
+    Button bc;
     @FXML
     private Text winnerText;
 
@@ -49,7 +50,7 @@ public class Controlador implements Initializable {
     @FXML
     ArrayList<Button> buttons = new ArrayList<>();
 
-    int idModo;
+    int idModo = 0;
     public void comprobarModo(){
         if(humanvshuman.isSelected()){
             idModo=0;
@@ -75,11 +76,30 @@ public class Controlador implements Initializable {
     }
 
     public void HumanVSHuman(){
-        buttons = new ArrayList<>(Arrays.asList(b0,b1, b2, b3, b4, b5, b6, b7, b8));
-        buttons.forEach(button -> {
-            setupButton(button);
-            button.setFocusTraversable(false);
-        });
+
+    }
+
+    public void Marcar(ActionEvent event){
+        boolean x = false;
+        boolean o = false;
+
+        bc = (Button) event.getSource();
+        String sid = bc.getId().replaceAll("[b]","");
+        int id =Integer.valueOf(sid);
+
+        if(bc.isPressed()){
+            x=true;
+            bc.setText("X");
+            System.out.println("X true");
+        }
+
+        if(bc.isPressed()){
+            o=true;
+            bc.setText("O");
+            System.out.println("Y true");
+        }
+
+
     }
 
     @FXML
@@ -87,11 +107,21 @@ public class Controlador implements Initializable {
         buttons.forEach(this::resetButton);
         winnerText.setText("Tres en raya");
     }
-
     public void resetButton(Button button) {
         button.setDisable(false);
         button.setText("");
     }
+     /*public void HumanVSHuman(){
+        buttons = new ArrayList<>(Arrays.asList(b0,b1, b2, b3, b4, b5, b6, b7, b8));
+        buttons.forEach(button -> {
+            setupButton(button);
+            button.setFocusTraversable(false);
+        });
+    }
+
+
+
+
 
     private void setupButton(Button button) {
         button.setOnMouseClicked(mouseEvent -> {
@@ -137,7 +167,6 @@ public class Controlador implements Initializable {
                 return;
             }
         }
+
+  */
     }
-
-
-}
