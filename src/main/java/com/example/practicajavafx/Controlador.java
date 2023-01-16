@@ -143,7 +143,7 @@ public class Controlador {
                 break;
             }
 
-            //intentar cambiar el bc para poner un numero random y q clique solo
+            //intentar cambiar el bc para poner un numero random y q clicke solo
 
             if (turnoIA == false) {
                 buttons.get(botonIA).setText("X");
