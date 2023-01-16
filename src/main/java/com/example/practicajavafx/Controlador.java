@@ -143,6 +143,8 @@ public class Controlador {
                 break;
             }
 
+            //intentar cambiar el bc para poner un numero random y q clique solo
+
             if (turnoIA == false) {
                 buttons.get(botonIA).setText("X");
                 turnoIA = true;
@@ -174,7 +176,11 @@ public class Controlador {
 
             if (linea.equals("XXX")) {
                 winnerText.setText("¡Gano X!");
+                for(int j=0; j<buttons.size();j++){
+                    buttons.get(j).setDisable(true);
+                }
 
+                /*
                 b0.setDisable(true);
                 b1.setDisable(true);
                 b2.setDisable(true);
@@ -184,12 +190,17 @@ public class Controlador {
                 b6.setDisable(true);
                 b7.setDisable(true);
                 b8.setDisable(true);
+
+                 */
 
             }
 
             else if (linea.equals("OOO")) {
                 winnerText.setText("¡Gano O!");
-
+                for(int j=0; j<buttons.size();j++){
+                    buttons.get(j).setDisable(true);
+                }
+                /*
                 b0.setDisable(true);
                 b1.setDisable(true);
                 b2.setDisable(true);
@@ -199,6 +210,8 @@ public class Controlador {
                 b6.setDisable(true);
                 b7.setDisable(true);
                 b8.setDisable(true);
+
+                 */
 
             }
         }
