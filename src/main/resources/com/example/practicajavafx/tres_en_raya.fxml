@@ -46,13 +46,16 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <RadioButton fx:id="computervscomputer" layoutX="30.0" layoutY="40.0" mnemonicParsing="false" onAction="#comprobarModo" text="Computer vs. Computer">
+                  <RadioButton fx:id="computervscomputer" layoutX="30.0" layoutY="74.0" mnemonicParsing="false" onAction="#comprobarModo" text="Computer vs. Computer">
                      <toggleGroup>
                         <ToggleGroup fx:id="gamemode" />
                      </toggleGroup></RadioButton>
-                  <RadioButton fx:id="humanvshuman" layoutX="30.0" layoutY="73.0" mnemonicParsing="false" onAction="#comprobarModo" selected="true" text="Human vs. Human" toggleGroup="$gamemode" />
-                  <RadioButton fx:id="humanvscomputer" layoutX="30.0" layoutY="106.0" mnemonicParsing="false" onAction="#comprobarModo" text="Human vs. Computer" toggleGroup="$gamemode" />
-                  <Button layoutX="78.0" layoutY="179.0" mnemonicParsing="false" onAction="#restartGame" text="Comenzar" />
+                  <RadioButton fx:id="humanvshuman" layoutX="30.0" layoutY="44.0" mnemonicParsing="false" onAction="#comprobarModo" selected="true" text="Human vs. Human" toggleGroup="$gamemode" />
+                  <RadioButton fx:id="humanvscomputer" layoutX="30.0" layoutY="105.0" mnemonicParsing="false" onAction="#comprobarModo" text="Human vs. Computer" toggleGroup="$gamemode" />
+                  <Button layoutX="78.0" layoutY="179.0" mnemonicParsing="false" onAction="#comenzarJuego" text="Comenzar" textFill="#1700ff">
+                     <font>
+                        <Font size="15.0" />
+                     </font></Button>
                </children>
             </AnchorPane>
         </items>
