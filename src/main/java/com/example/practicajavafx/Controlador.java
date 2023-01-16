@@ -46,8 +46,8 @@ public class Controlador {
     RadioButton humanvscomputer;
 
 
-    @FXML
     ArrayList<Button> buttons = new ArrayList<>();
+
 
     int idModo = 0;
 
@@ -74,6 +74,18 @@ public class Controlador {
 
 
     public void Marcar(ActionEvent event){
+        //Añadir botones al array
+        buttons.add(b0);
+        buttons.add(b1);
+        buttons.add(b2);
+        buttons.add(b3);
+        buttons.add(b4);
+        buttons.add(b5);
+        buttons.add(b6);
+        buttons.add(b7);
+        buttons.add(b8);
+
+
         bc = (Button) event.getSource();
         String sid = bc.getId().replaceAll("[b]","");
         int id =Integer.valueOf(sid);
@@ -122,17 +134,6 @@ public class Controlador {
     }
 
     public void ComputerVSComputer(){
-        //Añadir botones al array
-            buttons.add(b0);
-            buttons.add(b1);
-            buttons.add(b2);
-            buttons.add(b3);
-            buttons.add(b4);
-            buttons.add(b5);
-            buttons.add(b6);
-            buttons.add(b7);
-            buttons.add(b8);
-
 
         int botonIA = (int) (Math.random()*8+0);
 
@@ -204,6 +205,12 @@ public class Controlador {
     }
 
     public void comenzarJuego() {
+
+        for(int i=0; i<buttons.size();i++){
+            buttons.get(i).setDisable(false);
+            buttons.get(i).setText("");
+        }
+        /*
         b0.setDisable(false);
         b1.setDisable(false);
         b2.setDisable(false);
@@ -214,6 +221,9 @@ public class Controlador {
         b7.setDisable(false);
         b8.setDisable(false);
 
+         */
+
+        /*
         b0.setText("");
         b1.setText("");
         b2.setText("");
@@ -223,6 +233,8 @@ public class Controlador {
         b6.setText("");
         b7.setText("");
         b8.setText("");
+
+         */
 
         comenzarJuego = true;
     }
