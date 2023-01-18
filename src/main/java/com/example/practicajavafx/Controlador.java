@@ -1,17 +1,15 @@
 package com.example.practicajavafx;
 
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 //implements Initializable para cuando se inicie el xml iniciar lo que pongamos en el metodo
@@ -39,6 +37,8 @@ public class Controlador implements Initializable {
     @FXML
     Button bd;
     @FXML
+    BorderPane borderPane;
+    @FXML
     private Text winnerText;
     @FXML
     RadioButton computervscomputer;
@@ -46,25 +46,21 @@ public class Controlador implements Initializable {
     RadioButton humanvshuman;
     @FXML
     RadioButton humanvscomputer;
-
+    String negro = this.getClass().getResource("TemaNegro.css").toExternalForm();
+    String rojo = this.getClass().getResource("TemaRojo.css").toExternalForm();
     ArrayList<Button> buttons = new ArrayList<>();
-
     int idModo = 0;
-
     int contadorRondas=0;
-
     boolean turnoJugador = false;
-
     boolean turnoIA = false;
-
     boolean comenzarJuego=false;
-
     boolean finDelJuego=false;
-
     boolean comenzarhumanvshuman=false;
-
     boolean comenzarhumanvscomputer=false;
+    boolean empate=false;
+    boolean win=false;
 
+    //Iniciar con los botones en el array
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         buttons.add(b0);
@@ -79,7 +75,7 @@ public class Controlador implements Initializable {
 
     }
 
-
+    //Comprobar el modo de juego
     public void comprobarModo(){
         if(humanvshuman.isSelected()){
             idModo=0;
@@ -103,7 +99,7 @@ public class Controlador implements Initializable {
         }
     }
 
-
+    //Marcar los botones y que se ejecuten los metodos que hacen falta clickar
     public void Marcar(ActionEvent event){
          bc = (Button) event.getSource();
          for(int i=0;i<1;i++){
@@ -118,13 +114,11 @@ public class Controlador implements Initializable {
                  break;
              }
          }
-
-
-
     }
 
 
     public void HumanVSHuman(){
+
         for(int i=0;i<1;i++) {
 
             if(comenzarJuego== true){
@@ -157,7 +151,6 @@ public class Controlador implements Initializable {
         }
     }
 
-
     public void ComputerVSComputer() {
         turnoIA = false;
         while (!finDelJuego) {
@@ -187,43 +180,50 @@ public class Controlador implements Initializable {
 
     public void HumanVSComputer(){
         turnoIA = false;
-        //while (!finDelJuego) {
+        //Probar while mientras empate sea true
+        //Mirar debug de los ganadores
 
         for(int i=0;i<2;i++) {
-
-            /*if(contadorRondas==9){
+            if(win==true){
                 break;
             }
 
-             */
+            else {
+                if (turnoIA == false) {
+                    if(bc.getText()=="X" || bc.getText()=="O"){
+                        break;
+                    }
+                    else{
+                        bc.setText("X");
+                        turnoIA = true;
+                        contadorRondas++;
+                        comprobarGanador();
+                        continue;
+                    }
 
-            if (turnoIA == false) {
-                bc.setText("X");
-                turnoIA = true;
-                contadorRondas++;
-                comprobarGanador();
-                continue;
+                }
 
+                if (turnoIA == true) {
+                    bd = buttons.get(botonlibre());
+                    bd.setText("O");
+                    turnoIA = false;
+                    contadorRondas++;
+                    comprobarGanador();
+                }
             }
 
-            if (turnoIA == true) {
-                bd = buttons.get(botonlibre());
-                bd.setText("O");
-                turnoIA = false;
-                contadorRondas++;
-                comprobarGanador();
-                continue;
-            }
-            comprobarGanador();
         }
+        comprobarGanador();
     }
 
 
-
+    //Resetear tablero
     public void resetearTablero(){
          contadorRondas=0;
 
          turnoJugador = false;
+
+         empate =false;
 
          turnoIA = false;
 
@@ -231,13 +231,15 @@ public class Controlador implements Initializable {
 
          finDelJuego=false;
 
+         win=false;
+
         for(int i=0; i<buttons.size();i++){
             buttons.get(i).setDisable(false);
             buttons.get(i).setText("");
         }
     }
 
-
+    //Comenzar juegos
     public void comenzarJuego() {
         winnerText.setText("tres en raya");
         resetearTablero();
@@ -257,7 +259,7 @@ public class Controlador implements Initializable {
     }
 
 
-
+    //Comprobar el ganador
     public void comprobarGanador() {
         for (int i = 0; i < 8; i++) {
             String linea = switch (i) {
@@ -276,6 +278,8 @@ public class Controlador implements Initializable {
             if (linea.equals("XXX")) {
                 winnerText.setText("¡Gano X!");
                 finDelJuego=true;
+                win=true;
+                contadorRondas=0;
                 comenzarhumanvshuman=false;
                 comenzarhumanvscomputer=false;
 
@@ -287,6 +291,8 @@ public class Controlador implements Initializable {
             else if (linea.equals("OOO")) {
                 winnerText.setText("¡Gano O!");
                 finDelJuego=true;
+                win=true;
+                contadorRondas=0;
                 comenzarhumanvshuman=false;
                 comenzarhumanvscomputer=false;
                 for(int j=0; j<buttons.size();j++){
@@ -294,20 +300,20 @@ public class Controlador implements Initializable {
                 }
 
             }
+        }
+          if (contadorRondas==9){
+              winnerText.setText("Empate");
+              empate=true;
+            comenzarhumanvshuman=false;
+            comenzarhumanvscomputer=false;
+            finDelJuego=true;
+            for(int j=0; j<buttons.size();j++) {
+                buttons.get(j).setDisable(true);
+            }
 
-           else if (contadorRondas==9){
-                winnerText.setText("¡Empate!");
-                comenzarhumanvshuman=false;
-                comenzarhumanvscomputer=false;
-                finDelJuego=true;
-               for(int j=0; j<buttons.size();j++) {
-                   buttons.get(j).setDisable(true);
-               }
-
-               }
         }
     }
-
+    //Boton libre disponible
     public int botonlibre(){
         int botonIA = (int) (Math.random()*9+0);
         while(!buttons.get(botonIA).getText().isEmpty()){

@@ -15,8 +15,8 @@
    <top>
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
-          <Button mnemonicParsing="false" stylesheets="@TemaNegro.css" text="FIle" />
-            <Button mnemonicParsing="false" stylesheets="@TemaNegro.css" text="Help" />
+          <Button mnemonicParsing="false" stylesheets="@TemaRojo.css" text="FIle" />
+            <Button mnemonicParsing="false" stylesheets="@TemaRojo.css" text="Help" />
         </items>
       </ToolBar>
    </top>
