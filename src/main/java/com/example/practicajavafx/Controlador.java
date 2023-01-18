@@ -61,6 +61,10 @@ public class Controlador implements Initializable {
 
     boolean finDelJuego=false;
 
+    boolean comenzarhumanvshuman=false;
+
+    boolean comenzarhumanvscomputer=false;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         buttons.add(b0);
@@ -80,15 +84,21 @@ public class Controlador implements Initializable {
         if(humanvshuman.isSelected()){
             idModo=0;
             resetearTablero();
+            comenzarhumanvshuman=false;
+            comenzarhumanvscomputer=false;
 
         }
         if(computervscomputer.isSelected()){
             idModo=1;
             resetearTablero();
+            comenzarhumanvshuman=false;
+            comenzarhumanvscomputer=false;
         }
         if(humanvscomputer.isSelected()){
             idModo=2;
             resetearTablero();
+            comenzarhumanvshuman=false;
+            comenzarhumanvscomputer=false;
 
         }
     }
@@ -96,19 +106,21 @@ public class Controlador implements Initializable {
 
     public void Marcar(ActionEvent event){
          bc = (Button) event.getSource();
+         for(int i=0;i<1;i++){
+             if(comenzarhumanvshuman){
+                 HumanVSHuman();
+                 break;
+             }
 
-        /* if(idModo == 0){
-             HumanVSHuman();
+
+             if(comenzarhumanvscomputer){
+                 HumanVSComputer();
+                 break;
+             }
          }
 
-         */
-
-        if(idModo == 2);{
-            HumanVSComputer();
-        }
 
 
-        comprobarGanador();
     }
 
 
@@ -129,6 +141,7 @@ public class Controlador implements Initializable {
                 bc.setText("X");
                 turnoJugador = true;
                 contadorRondas++;
+                comprobarGanador();
                 break;
 
             }
@@ -138,6 +151,7 @@ public class Controlador implements Initializable {
                 turnoJugador = false;
                 bc.setText("O");
                 contadorRondas++;
+                comprobarGanador();
                 break;
             }
         }
@@ -166,7 +180,9 @@ public class Controlador implements Initializable {
                 continue;
             }
 
+
         }
+        comprobarGanador();
     }
 
     public void HumanVSComputer(){
@@ -174,11 +190,12 @@ public class Controlador implements Initializable {
         //while (!finDelJuego) {
 
         for(int i=0;i<2;i++) {
-            if(contadorRondas==9){
+
+            /*if(contadorRondas==9){
                 break;
             }
-            bd = buttons.get(botonlibre());
 
+             */
 
             if (turnoIA == false) {
                 bc.setText("X");
@@ -190,13 +207,14 @@ public class Controlador implements Initializable {
             }
 
             if (turnoIA == true) {
+                bd = buttons.get(botonlibre());
                 bd.setText("O");
                 turnoIA = false;
                 contadorRondas++;
                 comprobarGanador();
                 continue;
             }
-
+            comprobarGanador();
         }
     }
 
@@ -224,11 +242,18 @@ public class Controlador implements Initializable {
         winnerText.setText("tres en raya");
         resetearTablero();
 
-        if (idModo==1){
+        if (idModo == 0) {
+            comenzarhumanvshuman = true;
+        }
+        if(idModo==1){
             ComputerVSComputer();
         }
 
-        comenzarJuego = true;
+        if (idModo == 2) {
+            comenzarhumanvscomputer = true;
+        }
+
+         comenzarJuego = true;
     }
 
 
@@ -251,6 +276,9 @@ public class Controlador implements Initializable {
             if (linea.equals("XXX")) {
                 winnerText.setText("¡Gano X!");
                 finDelJuego=true;
+                comenzarhumanvshuman=false;
+                comenzarhumanvscomputer=false;
+
                 for(int j=0; j<buttons.size();j++){
                     buttons.get(j).setDisable(true);
                 }
@@ -259,15 +287,24 @@ public class Controlador implements Initializable {
             else if (linea.equals("OOO")) {
                 winnerText.setText("¡Gano O!");
                 finDelJuego=true;
+                comenzarhumanvshuman=false;
+                comenzarhumanvscomputer=false;
                 for(int j=0; j<buttons.size();j++){
                     buttons.get(j).setDisable(true);
                 }
 
             }
-           if (contadorRondas==9){
+
+           else if (contadorRondas==9){
                 winnerText.setText("¡Empate!");
+                comenzarhumanvshuman=false;
+                comenzarhumanvscomputer=false;
                 finDelJuego=true;
-            }
+               for(int j=0; j<buttons.size();j++) {
+                   buttons.get(j).setDisable(true);
+               }
+
+               }
         }
     }
 
@@ -278,5 +315,6 @@ public class Controlador implements Initializable {
         }
         return botonIA;
     }
+
 
 }
