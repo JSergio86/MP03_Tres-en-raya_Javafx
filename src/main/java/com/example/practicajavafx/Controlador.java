@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.ResourceBundle;
 
 //implements Initializable para cuando se inicie el xml iniciar lo que pongamos en el metodo
-public class Controlador {
+public class Controlador implements Initializable {
     @FXML
     Button b0;
     @FXML
@@ -37,6 +37,8 @@ public class Controlador {
     @FXML
     Button bc;
     @FXML
+    Button bd;
+    @FXML
     private Text winnerText;
     @FXML
     RadioButton computervscomputer;
@@ -45,36 +47,22 @@ public class Controlador {
     @FXML
     RadioButton humanvscomputer;
 
-
     ArrayList<Button> buttons = new ArrayList<>();
-
 
     int idModo = 0;
 
+    int contadorRondas=0;
+
     boolean turnoJugador = false;
+
     boolean turnoIA = false;
 
     boolean comenzarJuego=false;
 
+    boolean finDelJuego=false;
 
-    public void comprobarModo(){
-        if(humanvshuman.isSelected()){
-            idModo=0;
-
-        }
-        if(computervscomputer.isSelected()){
-            idModo=1;
-        }
-        if(humanvscomputer.isSelected()){
-            idModo=2;
-            System.out.println("Modo humanvscompter");
-
-        }
-    }
-
-
-    public void Marcar(ActionEvent event){
-        //Añadir botones al array
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         buttons.add(b0);
         buttons.add(b1);
         buttons.add(b2);
@@ -85,79 +73,165 @@ public class Controlador {
         buttons.add(b7);
         buttons.add(b8);
 
+    }
 
-        bc = (Button) event.getSource();
-        String sid = bc.getId().replaceAll("[b]","");
-        int id =Integer.valueOf(sid);
+
+    public void comprobarModo(){
+        if(humanvshuman.isSelected()){
+            idModo=0;
+            resetearTablero();
+
+        }
+        if(computervscomputer.isSelected()){
+            idModo=1;
+            resetearTablero();
+        }
+        if(humanvscomputer.isSelected()){
+            idModo=2;
+            resetearTablero();
+
+        }
+    }
+
+
+    public void Marcar(ActionEvent event){
+         bc = (Button) event.getSource();
+
+        /* if(idModo == 0){
+             HumanVSHuman();
+         }
+
+         */
+
+        if(idModo == 2);{
+            HumanVSComputer();
+        }
+
+
+        comprobarGanador();
+    }
+
+
+    public void HumanVSHuman(){
+        for(int i=0;i<1;i++) {
 
             if(comenzarJuego== true){
                 turnoJugador=false;
                 comenzarJuego=false;
             }
 
-            if(idModo==0){
-                HumanVSHuman();
-            }
-
-            if(idModo==1){
-                ComputerVSComputer();
-            }
-
-            if(idModo==2){
-
-            }
-
-
-        comprobarGanador();
-    }
-
-    public void HumanVSHuman(){
-        for(int i=0;i<1;i++) {
             if(bc.getText() == "X" || bc.getText() == "O"){
-                winnerText.setText("No esta permitido");
                 break;
             }
 
             if (turnoJugador == false) {
+                winnerText.setText("Turno de X");
                 bc.setText("X");
                 turnoJugador = true;
+                contadorRondas++;
                 break;
 
             }
 
             if (turnoJugador == true) {
+                winnerText.setText("Turno de O");
                 turnoJugador = false;
                 bc.setText("O");
+                contadorRondas++;
                 break;
             }
         }
     }
 
-    public void ComputerVSComputer(){
 
-        int botonIA = (int) (Math.random()*8+0);
-
-        for(int i=0;i<1;i++) {
-            //No funciona bien cambiar bc por buttons.get(botonIA).setText("X");
-            if(bc.getText() == "X" || bc.getText() == "O"){
-                break;
-            }
-
-            //intentar cambiar el bc para poner un numero random y q clicke solo
+    public void ComputerVSComputer() {
+        turnoIA = false;
+        while (!finDelJuego) {
+            bd = buttons.get(botonlibre());
 
             if (turnoIA == false) {
-                buttons.get(botonIA).setText("X");
+                bd.setText("X");
                 turnoIA = true;
-                break;
+                contadorRondas++;
+                comprobarGanador();
+                continue;
+
             }
 
             if (turnoIA == true) {
-                buttons.get(botonIA).setText("O");
+                bd.setText("O");
                 turnoIA = false;
-                break;
+                contadorRondas++;
+                comprobarGanador();
+                continue;
             }
+
         }
     }
+
+    public void HumanVSComputer(){
+        turnoIA = false;
+        //while (!finDelJuego) {
+
+        for(int i=0;i<2;i++) {
+            if(contadorRondas==9){
+                break;
+            }
+            bd = buttons.get(botonlibre());
+
+
+            if (turnoIA == false) {
+                bc.setText("X");
+                turnoIA = true;
+                contadorRondas++;
+                comprobarGanador();
+                continue;
+
+            }
+
+            if (turnoIA == true) {
+                bd.setText("O");
+                turnoIA = false;
+                contadorRondas++;
+                comprobarGanador();
+                continue;
+            }
+
+        }
+    }
+
+
+
+    public void resetearTablero(){
+         contadorRondas=0;
+
+         turnoJugador = false;
+
+         turnoIA = false;
+
+         comenzarJuego=false;
+
+         finDelJuego=false;
+
+        for(int i=0; i<buttons.size();i++){
+            buttons.get(i).setDisable(false);
+            buttons.get(i).setText("");
+        }
+    }
+
+
+    public void comenzarJuego() {
+        winnerText.setText("tres en raya");
+        resetearTablero();
+
+        if (idModo==1){
+            ComputerVSComputer();
+        }
+
+        comenzarJuego = true;
+    }
+
+
 
     public void comprobarGanador() {
         for (int i = 0; i < 8; i++) {
@@ -176,80 +250,33 @@ public class Controlador {
 
             if (linea.equals("XXX")) {
                 winnerText.setText("¡Gano X!");
+                finDelJuego=true;
                 for(int j=0; j<buttons.size();j++){
                     buttons.get(j).setDisable(true);
                 }
-
-                /*
-                b0.setDisable(true);
-                b1.setDisable(true);
-                b2.setDisable(true);
-                b3.setDisable(true);
-                b4.setDisable(true);
-                b5.setDisable(true);
-                b6.setDisable(true);
-                b7.setDisable(true);
-                b8.setDisable(true);
-
-                 */
-
             }
 
             else if (linea.equals("OOO")) {
                 winnerText.setText("¡Gano O!");
+                finDelJuego=true;
                 for(int j=0; j<buttons.size();j++){
                     buttons.get(j).setDisable(true);
                 }
-                /*
-                b0.setDisable(true);
-                b1.setDisable(true);
-                b2.setDisable(true);
-                b3.setDisable(true);
-                b4.setDisable(true);
-                b5.setDisable(true);
-                b6.setDisable(true);
-                b7.setDisable(true);
-                b8.setDisable(true);
 
-                 */
-
+            }
+           if (contadorRondas==9){
+                winnerText.setText("¡Empate!");
+                finDelJuego=true;
             }
         }
     }
 
-    public void comenzarJuego() {
-
-        for(int i=0; i<buttons.size();i++){
-            buttons.get(i).setDisable(false);
-            buttons.get(i).setText("");
+    public int botonlibre(){
+        int botonIA = (int) (Math.random()*9+0);
+        while(!buttons.get(botonIA).getText().isEmpty()){
+            botonIA= (int) (Math.random()*9+0);
         }
-        /*
-        b0.setDisable(false);
-        b1.setDisable(false);
-        b2.setDisable(false);
-        b3.setDisable(false);
-        b4.setDisable(false);
-        b5.setDisable(false);
-        b6.setDisable(false);
-        b7.setDisable(false);
-        b8.setDisable(false);
-
-         */
-
-        /*
-        b0.setText("");
-        b1.setText("");
-        b2.setText("");
-        b3.setText("");
-        b4.setText("");
-        b5.setText("");
-        b6.setText("");
-        b7.setText("");
-        b8.setText("");
-
-         */
-
-        comenzarJuego = true;
+        return botonIA;
     }
 
-    }
+}
